@@ -3,34 +3,29 @@
 // Did this code successfully run on Leetcode : Yes
 // Any problem you faced while coding this : No
 
+// Search in a sorted array of unknown size
+// - Finds a valid search range by exponentially expanding the upper bound until it is greater than or equal to the target
+// - Performs binary search within the identified range to locate the target.
 
-//Search in rotated sorted array
-// - At each step, determines whether the left half or right half is sorted, then checks if the target lies within that sorted portion.
-// - Narrows the search range accordingly and returns the target's index if found; otherwise returns -1.
+class Problem3 {
+    public int search(ArrayReader reader, int target) {
+        int low = 0, high = 1;
 
-
-class Problem2 {
-    public int search(int[] nums, int target) {
-        int low = 0, high = nums.length - 1;
+        while(target > reader.get(high)) {
+            low = high;
+            high = high * 2;
+        }
 
         while(low <= high) {
-            int mid = low + ((high - low) / 2);
+            int mid = low + (high - low) / 2;
 
-            if(nums[mid] == target) {
+            if(reader.get(mid) == target) {
                 return mid;
             }
-            if(nums[low] < nums[mid]) {
-                if(target >= nums[low] && target < nums[mid]) {
-                    high = mid - 1;
-                } else {
-                    low = mid + 1;
-                }
+            if(target < reader.get(mid)) {
+                high = mid - 1;
             } else {
-                if(target > nums[mid] && target <= nums[high]) {
-                    low = mid + 1;
-                } else {
-                    high = mid - 1;
-                }
+                low = mid + 1;
             }
         }
 
